@@ -1,6 +1,9 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+
+import ContactCollection from './db/models/Movie.js';
+
 import { getEnvVar } from './utils/getEnvVar.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
@@ -11,21 +14,13 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
 
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  app.get('/contacts', async (req, res) => {
+    const contacts = await ContactCollection.find();
 
-  app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello World!',
-    });
+    res.json(contacts);
   });
 
-  app.use('*', (req, res, next) => {
+  app.use((req, res) => {
     res.status(404).json({
       message: 'Not found',
     });
@@ -37,6 +32,14 @@ export const setupServer = () => {
       error: err.message,
     });
   });
+
+  // app.use(
+  //   pino({
+  //     transport: {
+  //       target: 'pino-pretty',
+  //     },
+  //   }),
+  // );
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
