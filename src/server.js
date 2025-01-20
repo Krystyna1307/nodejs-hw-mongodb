@@ -17,7 +17,11 @@ export const setupServer = () => {
   app.get('/contacts', async (req, res) => {
     const contacts = await ContactCollection.find();
 
-    res.json(contacts);
+    res.json({
+      status: 200,
+      message: 'Successfully found contacts!',
+      data: contacts,
+    });
   });
 
   app.use((req, res) => {
