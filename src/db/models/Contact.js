@@ -13,7 +13,7 @@ const contactSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }, // Додає createdAt та updatedAt
+  { timestamps: true }, // Додає createdAt(дату додавання) та updatedAt(дату останнього оновлення)
 );
 
 const ContactCollection = model('contact', contactSchema);
