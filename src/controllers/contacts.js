@@ -18,9 +18,6 @@ export const getContactsByIdController = async (req, res) => {
 
   if (!data) {
     throw createHttpError(404, `Contact not found`); // 2 помилка вилітає з контроллера, її ловить ctrlWrapper 3
-    // const error = new Error(`Contact not found`);
-    // error.status = 404;
-    // throw error;
   }
 
   res.json({
@@ -37,5 +34,21 @@ export const addContactController = async (req, res) => {
     status: 201,
     message: 'Successfully created a contact!',
     data,
+  });
+};
+
+export const patchContactController = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await contactServices.updateContact(contactId, req.body);
+
+  if (!result) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
+  }
+
+  res.json({
+    status: 200,
+    message: 'Successfully patched a contact!',
+    data: result.data,
   });
 };
