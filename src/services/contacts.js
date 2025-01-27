@@ -9,7 +9,6 @@ export const addContact = (payload) => ContactCollection.create(payload);
 export const updateContact = async (_id, payload, options = {}) => {
   const { upsert = false } = options;
   const result = await ContactCollection.findOneAndUpdate({ _id }, payload, {
-    new: true,
     upsert, //додає оновлений обект (для PATCH не треба!)
     includeResultMetadata: true,
   });
