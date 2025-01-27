@@ -31,6 +31,7 @@ contactsRouter.put(
 contactsRouter.patch(
   '/:contactId',
   isValidId,
+  validateBody(contactUpdateSchema),
   ctrlWrapper(contactsController.patchContactController),
 );
 contactsRouter.delete(
