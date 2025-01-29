@@ -7,27 +7,34 @@ export const getContacts = async ({
   perPage = 10,
   sortBy = '_id',
   sortOrder = 'asc',
+  filter = {},
 }) => {
   const limit = perPage;
   const skip = (page - 1) * limit; // рахуємо скільки сторінок треба пропустити
+  const contactsQuery = ContactCollection.find();
 
-  const data = await ContactCollection.find()
+  if (filter.type) {
+    contactsQuery.where('type').equals(filter.type);
+  }
+
+  const contacts = await contactsQuery
+    // .find()
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder }); //якщо сервіс викидає помилку, вона вилітає з controllers далі 2
-  const totalItems = await ContactCollection.countDocuments(); //загальна кількість (одразу число)
+
+  const totalItems = await ContactCollection.find()
+    .merge(contactsQuery)
+    .countDocuments(); //загальна кількість (одразу число)
 
   const paginationData = calcPaginationData({ totalItems, page, perPage });
 
   return {
-    data,
+    contacts,
     page,
     perPage,
     totalItems,
     ...paginationData,
-    // totalPages: 2,
-    // hasPreviousPage: true,
-    // hasNextPage: false,
   };
 };
 
