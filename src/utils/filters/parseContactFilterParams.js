@@ -3,12 +3,14 @@ const parseType = (type) => {
     return type;
   }
   return undefined;
+};
 
-  // const isString = typeof type === 'string';
-  // if (!isString) return;
-
-  // const isType = (type) => ['work', 'home', 'personal'].includes(type);
-  // if (isType(type)) return type;
+const parseBoolean = (value) => {
+  if (typeof value === 'string') {
+    if (value.toLowerCase() === 'true') return true;
+    if (value.toLowerCase() === 'false') return false;
+  }
+  return undefined;
 };
 
 export const parseContactFilterParams = (query) => {
@@ -16,12 +18,6 @@ export const parseContactFilterParams = (query) => {
 
   return {
     type: parseType(contactType),
-    isFavourite: isFavourite === 'true', // перетворюємо строку у boolean
+    isFavourite: parseBoolean(isFavourite), // перетворюємо строку у boolean
   };
-
-  // const parsedType = parseType(type);
-
-  // return {
-  //   type: parsedType,
-  // };
 };

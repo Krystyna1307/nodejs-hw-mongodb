@@ -11,15 +11,18 @@ export const getContacts = async ({
 }) => {
   const limit = perPage;
   const skip = (page - 1) * limit; // рахуємо скільки сторінок треба пропустити
+
   const contactsQuery = ContactCollection.find();
 
   if (filter.type) {
-    // contactsQuery.where('type').equals(filter.type);
     contactsQuery.where('contactType').equals(filter.type);
+  }
+  if (filter.isFavourite !== undefined) {
+    contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
   const contacts = await contactsQuery
-    // .find()
+    .find()
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder }); //якщо сервіс викидає помилку, вона вилітає з controllers далі 2
