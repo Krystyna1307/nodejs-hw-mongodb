@@ -1,16 +1,27 @@
 const parseType = (type) => {
-  const isString = typeof type === 'string';
-  if (!isString) return;
+  if (typeof type === 'string' && ['work', 'home', 'personal'].includes(type)) {
+    return type;
+  }
+  return undefined;
 
-  const isType = (type) => ['work', 'home', 'personal'].includes(type);
-  if (isType(type)) return type;
+  // const isString = typeof type === 'string';
+  // if (!isString) return;
+
+  // const isType = (type) => ['work', 'home', 'personal'].includes(type);
+  // if (isType(type)) return type;
 };
 
 export const parseContactFilterParams = (query) => {
-  const { type } = query;
-  const parsedType = parseType(type);
+  const { contactType, isFavourite } = query;
 
   return {
-    type: parsedType,
+    type: parseType(contactType),
+    isFavourite: isFavourite === 'true', // перетворюємо строку у boolean
   };
+
+  // const parsedType = parseType(type);
+
+  // return {
+  //   type: parsedType,
+  // };
 };
