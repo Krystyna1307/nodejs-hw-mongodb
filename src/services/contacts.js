@@ -1,5 +1,4 @@
 import ContactCollection from '../db/models/Contact.js';
-
 import { calcPaginationData } from '../utils/calcPaginationData.js';
 
 export const getContacts = async ({
@@ -21,20 +20,20 @@ export const getContacts = async ({
     contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
+  const totalItems = await ContactCollection.find()
+    .merge(contactsQuery)
+    .countDocuments(); //загальна кількість (одразу число)
+
   const contacts = await contactsQuery
     .find()
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder }); //якщо сервіс викидає помилку, вона вилітає з controllers далі 2
 
-  const totalItems = await ContactCollection.find()
-    .merge(contactsQuery)
-    .countDocuments(); //загальна кількість (одразу число)
-
   const paginationData = calcPaginationData({ totalItems, page, perPage });
 
   return {
-    contacts,
+    data: contacts,
     page,
     perPage,
     totalItems,
