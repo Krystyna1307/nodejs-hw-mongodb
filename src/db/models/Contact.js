@@ -19,10 +19,9 @@ const contactSchema = new Schema(
   { timestamps: true }, // Додає createdAt(дату додавання) та updatedAt(дату останнього оновлення)
 );
 
-contactSchema.post('save', handleSaveError);
-
-contactSchema.pre('findOneAndUpdate', setUpdateSettings);
-contactSchema.post('findOneAndUpdate', handleSaveError);
+contactSchema.post('save', handleSaveError); // присвоюємо статус, якщо валідація не пройшла
+contactSchema.pre('findOneAndUpdate', setUpdateSettings); // перед оновленням включаємо валідація
+contactSchema.post('findOneAndUpdate', handleSaveError); // присвоюємо правильний статус
 
 export const sortByList = [
   '_id',
