@@ -9,3 +9,27 @@ export const registerController = async (req, res) => {
     data,
   });
 };
+
+export const loginController = async (req, res) => {
+  const session = await authServices.login(req.body);
+
+  res.cookie('refreshToken', session.refreshToken, {
+    //httpOnly в них безпечніше зберігати
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.cookie('sessionId', session.id, {
+    //httpOnly в них безпечніше зберігати
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in an user!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
+};
