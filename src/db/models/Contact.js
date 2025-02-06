@@ -15,8 +15,13 @@ const contactSchema = new Schema(
       default: 'personal',
       required: true,
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
-  { timestamps: true }, // Додає createdAt(дату додавання) та updatedAt(дату останнього оновлення)
+  { versionKey: false, timestamps: true },
 );
 
 contactSchema.post('save', handleSaveError); // присвоюємо статус, якщо валідація не пройшла
