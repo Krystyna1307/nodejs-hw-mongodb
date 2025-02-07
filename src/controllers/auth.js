@@ -50,3 +50,15 @@ export const refreshTokenController = async (req, res) => {
     },
   });
 };
+
+export const logoutController = async (req, res) => {
+  if (req.cookies.sessionId) {
+    // якщо є кого розлогінувати - розлогінь
+    await authServices.logout(req.cookies.sessionId);
+  }
+
+  res.clearCookie('refreshToken'); // Видаляємо куки
+  res.clearCookie('sessionId');
+
+  res.status(204).send();
+};

@@ -77,6 +77,10 @@ export const refreshToken = async (payload) => {
   });
 };
 
+export const logout = async (sessionId) => {
+  await SessionCollection.deleteOne({ _id: sessionId }); // Видаляємо сессію
+};
+
 export const getUser = (filter) => UserCollection.findOne(filter);
 
 export const getSession = (filter) => SessionCollection.findOne(filter);
