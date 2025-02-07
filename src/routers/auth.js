@@ -21,4 +21,6 @@ authRouter.post(
   ctrlWrapper(authController.loginController),
 );
 
+authRouter.post('/refresh', ctrlWrapper(authController.refreshTokenController));
+
 export default authRouter;

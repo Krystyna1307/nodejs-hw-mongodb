@@ -1,5 +1,17 @@
 import * as authServices from '../services/auth.js';
 
+const setupSession = (res, session) => {
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.cookie('sessionId', session.id, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+};
+
 export const registerController = async (req, res) => {
   const data = await authServices.register(req.body);
 
@@ -13,21 +25,26 @@ export const registerController = async (req, res) => {
 export const loginController = async (req, res) => {
   const session = await authServices.login(req.body);
 
-  res.cookie('refreshToken', session.refreshToken, {
-    //httpOnly в них безпечніше зберігати
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
-
-  res.cookie('sessionId', session.id, {
-    //httpOnly в них безпечніше зберігати
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
+  setupSession(res, session);
 
   res.json({
     status: 200,
     message: 'Successfully logged in an user!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
+};
+
+export const refreshTokenController = async (req, res) => {
+  const { refreshToken, sessionId } = req.cookies;
+  const session = await authServices.refreshToken({ refreshToken, sessionId });
+
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully refresh session',
     data: {
       accessToken: session.accessToken,
     },
