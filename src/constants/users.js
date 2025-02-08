@@ -1,4 +1,4 @@
-export const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+export const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // регулярний вираз
 
 export const accessTokenLifetime = 1000 * 60 * 15; // час життя 15 хвилин (1000 = 1 сек, 60 = 1 хв, 15 хвилин)
 
