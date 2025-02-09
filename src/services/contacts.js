@@ -20,7 +20,7 @@ export const getContacts = async ({
     contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
   if (filter.userId) {
-    contactsQuery.where('userId').equals(filter.userId);
+    contactsQuery.where('userId').equals(filter.userId); // Якщо передали userId, то шукаємо тільки його контакти
   }
 
   const totalItems = await ContactCollection.find()
@@ -52,6 +52,7 @@ export const addContact = (payload) => ContactCollection.create(payload);
 
 export const updateContact = async (filter, payload, options = {}) => {
   const { upsert = false } = options;
+
   const result = await ContactCollection.findOneAndUpdate(filter, payload, {
     upsert, //додає оновлений обект (для PATCH не треба!)
     includeResultMetadata: true,

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
@@ -14,15 +13,16 @@ import {
 } from '../validation/contacts.js';
 
 const contactsRouter = Router();
-
 contactsRouter.use(authenticate);
 
 contactsRouter.get('/', ctrlWrapper(contactsController.getContactsController));
+
 contactsRouter.get(
   '/:contactId',
   isValidId,
-  ctrlWrapper(contactsController.getContactsByIdController),
+  ctrlWrapper(contactsController.getContactByIdController),
 );
+
 contactsRouter.post(
   '/',
   validateBody(contactAddSchema),

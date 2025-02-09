@@ -53,8 +53,7 @@ export const refreshTokenController = async (req, res) => {
 
 export const logoutController = async (req, res) => {
   if (req.cookies.sessionId) {
-    // якщо є кого розлогінувати - розлогінь
-    await authServices.logout(req.cookies.sessionId);
+    await authServices.logout(req.cookies.sessionId); // якщо є кого розлогінувати - розлогінь
   }
 
   res.clearCookie('refreshToken'); // Видаляємо куки

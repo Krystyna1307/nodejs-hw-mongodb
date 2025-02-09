@@ -12,7 +12,7 @@ export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
   const filter = parseContactFilterParams(req.query);
-  filter.userId = req.user._id;
+  filter.userId = req.user._id; //Додаємо поле userId
 
   const data = await contactServices.getContacts({
     page,
@@ -33,7 +33,7 @@ export const getContactByIdController = async (req, res) => {
   const { _id: userId } = req.user;
   const { contactId: _id } = req.params;
 
-  const data = await contactServices.getContactById({ _id, userId });
+  const data = await contactServices.getContact({ _id, userId });
 
   if (!data) {
     throw createHttpError(404, `Contact not found`); // 2 помилка вилітає з контроллера, її ловить ctrlWrapper 3
@@ -41,15 +41,15 @@ export const getContactByIdController = async (req, res) => {
 
   res.json({
     status: 200,
-    message: `Successfully found contact with id ${_id}!`,
+    message: `Successfully found contact!`,
     data,
   });
 };
 
 export const addContactController = async (req, res) => {
   const { _id: userId } = req.user;
+  const data = await contactServices.addContact({ ...req.body, userId }); // Додаємо дані про користувача
 
-  const data = await contactServices.addContact({ ...req.body, userId });
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
