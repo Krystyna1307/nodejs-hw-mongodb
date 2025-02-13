@@ -1,18 +1,29 @@
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
+import path from 'node:path';
+import { readFile } from 'node:fs/promises';
+import Handlebars from 'handlebars';
+import jwt from 'jsonwebtoken';
 
 import UserCollection from '../db/models/User.js';
 import SessionCollection from '../db/models/Session.js';
+
+import { sendEmail } from '../utils/sendEmail.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 import {
   accessTokenLifetime,
   refreshTokenLifetime,
 } from '../constants/users.js';
+import { TEMPLATES_DIR } from '../constants/index.js';
 
-import jwt from 'jsonwebtoken';
+const emailTemplatePath = path.join(TEMPLATES_DIR, 'verify-email.html');
 
-import { getEnvVar } from '../utils/getEnvVar.js';
+const emailTemplatesSource = await readFile(emailTemplatePath, 'utf-8');
+
+const appDomain = getEnvVar('APP_DOMAIN');
+const jwtSecret = getEnvVar('JWT_SECRET');
 
 const createSessionData = () => ({
   accessToken: randomBytes(30).toString('base64'),
@@ -35,15 +46,35 @@ export const register = async (payload) => {
     password: hashPassword,
   });
 
+  const template = Handlebars.compile(emailTemplatesSource);
+
+  const token = jwt.sign({ email }, jwtSecret, { expiresIn: '15m' });
+
+  const html = template({
+    link: `${appDomain}/verify?token=${token}`,
+  });
+
+  const verifyEmail = {
+    to: email,
+    subject: 'Verify email',
+    html,
+  };
+
+  await sendEmail(verifyEmail);
+
   return newUser;
 };
 
 export const login = async ({ email, password }) => {
-  // Перевіряємо чи взагалі є людина з таким email
-  const user = await UserCollection.findOne({ email });
+  const user = await UserCollection.findOne({ email }); // Перевіряємо чи взагалі є людина з таким email
   if (!user) {
     throw createHttpError(401, 'Email or password invalid');
   }
+
+  if (!user.verify) {
+    throw createHttpError(401, 'Email not verified');
+  }
+
   const passwordCompare = await bcrypt.compare(password, user.password); // Перевіряємо чи співпадають паролі
   if (!passwordCompare) {
     throw createHttpError(401, 'Email or password invalid');

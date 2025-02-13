@@ -14,14 +14,12 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const email = {
-  from: SMTP_USER,
-  to: 'yiromir277@minduls.com',
-  subject: 'Hello Ukraine!',
-  html: '<h1>Welcome to Ukraine</h1>',
+// const data = {
+//   to: 'yiromir277@minduls.com',
+//   subject: 'Hello Ukraine!',
+//   html: '<h1>Welcome to Ukraine</h1>',
+// };
+export const sendEmail = (data) => {
+  const email = { ...data, from: SMTP_USER };
+  return transport.sendMail(email);
 };
-
-transport
-  .sendMail(email)
-  .then((msg) => console.log(msg))
-  .catch((error) => console.log(error.message));
