@@ -12,9 +12,7 @@ import {
 
 import jwt from 'jsonwebtoken';
 
-import { SMTP } from '../constants/index.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
-import { sendEmail } from '../utils/sendMail.js';
 
 const createSessionData = () => ({
   accessToken: randomBytes(30).toString('base64'),
