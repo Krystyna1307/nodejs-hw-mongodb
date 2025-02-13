@@ -17,8 +17,8 @@ const transport = nodemailer.createTransport(nodemailerConfig);
 const email = {
   from: SMTP_USER,
   to: 'yiromir277@minduls.com',
-  subject: 'Hello Krystyna!',
-  html: '<h1>Welcome to Poland</h1>',
+  subject: 'Hello Ukraine!',
+  html: '<h1>Welcome to Ukraine</h1>',
 };
 
 transport
