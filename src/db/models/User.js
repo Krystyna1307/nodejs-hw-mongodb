@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { handleSaveError, setUpdateSettings } from './hooks.js';
+// import { handleSaveError, setUpdateSettings } from './hooks.js';
 import { emailRegexp } from '../../constants/users.js';
 
 const userSchema = new Schema(
@@ -18,11 +18,6 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    verify: {
-      type: Boolean,
-      default: false,
-      required: true,
-    },
   },
   {
     versionKey: false,
@@ -36,9 +31,9 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-userSchema.post('save', handleSaveError); // присвоюємо статус, якщо валідація не пройшла
-userSchema.pre('findOneAndUpdate', setUpdateSettings); // перед оновленням включаємо валідація
-userSchema.post('findOneAndUpdate', handleSaveError); // присвоюємо правильний статус
+// userSchema.post('save', handleSaveError); // присвоюємо статус, якщо валідація не пройшла
+// userSchema.pre('findOneAndUpdate', setUpdateSettings); // перед оновленням включаємо валідація
+// userSchema.post('findOneAndUpdate', handleSaveError); // присвоюємо правильний статус
 
 const UserCollection = model('user', userSchema);
 

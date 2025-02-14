@@ -1,25 +1,17 @@
 import nodemailer from 'nodemailer';
-import 'dotenv/config';
 
-const { SMTP_USER, SMTP_PASSWORD } = process.env;
+import { SMTP } from '../constants/index.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
-const nodemailerConfig = {
-  host: 'smtp-relay.brevo.com',
-  port: 587,
+const transporter = nodemailer.createTransport({
+  host: getEnvVar(SMTP.SMTP_HOST),
+  port: Number(getEnvVar(SMTP.SMTP_PORT)),
   auth: {
-    user: SMTP_USER,
-    pass: SMTP_PASSWORD,
+    user: getEnvVar(SMTP.SMTP_USER),
+    pass: getEnvVar(SMTP.SMTP_PASSWORD),
   },
-};
+});
 
-const transport = nodemailer.createTransport(nodemailerConfig);
-
-// const data = {
-//   to: 'yiromir277@minduls.com',
-//   subject: 'Hello Ukraine!',
-//   html: '<h1>Welcome to Ukraine</h1>',
-// };
-export const sendEmail = (data) => {
-  const email = { ...data, from: SMTP_USER };
-  return transport.sendMail(email);
+export const sendEmail = async (options) => {
+  return await transporter.sendMail(options);
 };
