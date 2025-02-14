@@ -43,7 +43,7 @@ export const register = async (payload) => {
   });
 };
 
-export const loginUser = async (payload) => {
+export const login = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email }); // Перевіряємо чи взагалі є людина з таким email
   if (!user) {
     throw createHttpError(404, 'User not found');
