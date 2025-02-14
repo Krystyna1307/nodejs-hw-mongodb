@@ -23,8 +23,6 @@ import {
   SMTP,
   TEMPLATES_DIR,
 } from '../constants/index.js';
-import { error } from 'node:console';
-import { link } from 'joi';
 
 const createSessionData = () => ({
   accessToken: randomBytes(30).toString('base64'),
