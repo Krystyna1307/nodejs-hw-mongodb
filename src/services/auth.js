@@ -17,6 +17,7 @@ import {
   refreshTokenLifetime,
 } from '../constants/users.js';
 import { TEMPLATES_DIR } from '../constants/index.js';
+import { error } from 'node:console';
 
 const emailTemplatePath = path.join(TEMPLATES_DIR, 'verify-email.html');
 
@@ -32,37 +33,64 @@ const createSessionData = () => ({
   refreshTokenValidUntil: Date.now() + refreshTokenLifetime,
 });
 
+// export const register = async (payload) => {
+//   const { email, password } = payload;
+
+//   const user = await UserCollection.findOne({ email });
+//   if (user) {
+//     throw createHttpError(409, 'Email in use');
+//   }
+
+//   const hashPassword = await bcrypt.hash(password, 10);
+
+//   const newUser = await UserCollection.create({
+//     ...payload,
+//     password: hashPassword,
+//   });
+
+//   const template = Handlebars.compile(emailTemplatesSource);
+
+//   const token = jwt.sign({ email }, jwtSecret, { expiresIn: '15m' });
+
+//   const html = template({
+//     link: `${appDomain}/verify?token=${token}`,
+//   });
+
+//   const verifyEmail = {
+//     to: email,
+//     subject: 'Verify email',
+//     html,
+//   };
+
+//   await sendEmail(verifyEmail);
+
+//   return newUser;
+// };
+
 export const register = async (payload) => {
-  const { email, password } = payload;
-  const user = await UserCollection.findOne({ email });
-  if (user) {
-    throw createHttpError(409, 'Email in use');
-  }
+  const user = await UserCollection.findOne({ email: payload.email });
+  if (user) throw createHttpError(409, 'Email in use');
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  const newUser = await UserCollection.create({
+  return await UserCollection.create({
     ...payload,
-    password: hashPassword,
+    password: encryptedPassword,
   });
+};
 
-  const template = Handlebars.compile(emailTemplatesSource);
+export const verify = async (token) => {
+  try {
+    const { email } = jwt.verify(token, jwtSecret);
+    const user = await UserCollection.findOne({ email });
+    if (!user) {
+      throw createHttpError(401, 'User not found');
+    }
 
-  const token = jwt.sign({ email }, jwtSecret, { expiresIn: '15m' });
-
-  const html = template({
-    link: `${appDomain}/verify?token=${token}`,
-  });
-
-  const verifyEmail = {
-    to: email,
-    subject: 'Verify email',
-    html,
-  };
-
-  await sendEmail(verifyEmail);
-
-  return newUser;
+    await UserCollection.findOneAndUpdate({ _id: user._id }, { verify: true });
+  } catch (error) {
+    throw createHttpError(401, error.message);
+  }
 };
 
 export const login = async ({ email, password }) => {
