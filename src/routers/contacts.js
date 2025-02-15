@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/upload.js';
 
 import * as contactsController from '../controllers/contacts.js';
 
@@ -23,8 +24,10 @@ contactsRouter.get(
   ctrlWrapper(contactsController.getContactByIdController),
 );
 
+// upload.array("photo", 8)  Якщо очікуємо 8 файлів в полі photo
 contactsRouter.post(
   '/',
+  upload.single('photo'),
   validateBody(contactAddSchema),
   ctrlWrapper(contactsController.addContactController),
 );

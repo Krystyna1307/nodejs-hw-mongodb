@@ -1,9 +1,13 @@
 import { initMongoDB } from './db/initMongoDB.js';
 import { setupServer } from './server.js';
 
-//IIDyRBcyc1QrfEfa
+import { createDirIfNotExist } from './utils/createDirIfNotExist.js';
+
+import { TEMP_UPLOAD_DIR, UPLOADS_DIR } from './constants/index.js';
 
 const boostrap = async () => {
+  await createDirIfNotExist(TEMP_UPLOAD_DIR);
+  await createDirIfNotExist(UPLOADS_DIR);
   await initMongoDB();
   setupServer();
 };

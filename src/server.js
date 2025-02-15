@@ -16,6 +16,7 @@ export const setupServer = () => {
 
   app.use(cors());
   app.use(express.json());
+  app.use(express.static('uploads')); // Коли прийшов запит на файл, шукай його в папці uploads, якщо є віддай
   app.use(cookieParser());
   // app.use(logger);
 
