@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { unlink } from 'node: fs/promises';
+import fs from 'node:fs/promises';
 import { getEnvVar } from './getEnvVar.js';
 
 const cloud_name = getEnvVar('CLOUDINARY_CLOUD_NAME');
@@ -16,6 +16,6 @@ export const saveFileToCloudihary = async (file) => {
   const response = await cloudinary.uploader.upload(file.path, {
     folder: 'photos',
   });
-  await unlink(file.path);
+  await fs.unlink(file.path);
   return response.secure_url;
 };
