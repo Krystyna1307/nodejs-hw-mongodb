@@ -1,6 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
+import createHttpError from 'http-errors';
 
 import { getEnvVar } from './getEnvVar.js';
 
@@ -25,4 +26,30 @@ export const generateOAuthUrl = () => {
     ],
   });
   return url;
+};
+
+export const validateCode = async (code) => {
+  const response = await googleOAuthClient.getToken(code);
+  if (!response?.tokens?.id_token)
+    throw createHttpError(401, 'Google OAuth code invalid');
+
+  const ticket = await googleOAuthClient.verifyIdToken({
+    idToken: response.tokens.id_token,
+  });
+  return ticket;
+};
+
+export const getUsernameFromGoogleTokenPayload = (payload) => {
+  if (payload.name) return payload.name;
+  let username = '';
+  if (payload.given_name) {
+    username += payload.given_name;
+  }
+  if (payload.given_name && payload.family_name) {
+    username += ` ${payload.family_name}`;
+  }
+  if (!payload.given_name && payload.family_name) {
+    username = payload.family_name;
+    return username;
+  }
 };
