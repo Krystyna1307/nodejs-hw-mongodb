@@ -5,14 +5,20 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build": "npm run build-docs",
+    "build-docs": "redocly bundle --ext json -o docs/swagger.json",
+    "preview-docs": "redocly preview-docs"
   },
+
+
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@redocly/cli": "^1.29.0",
     "eslint": "^9.18.0",
     "globals": "^15.14.0",
     "nodemon": "^3.1.9",
