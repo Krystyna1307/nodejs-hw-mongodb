@@ -13,6 +13,9 @@ servers:
   - url: http://localhost:3000
   - url: https://contacts.com/api/v1
 paths:
+  /contacts:
+    get:
+      $ref: ../swagger/paths/contacts/get.yaml
 components:
   securitySchemes:
     bearerAuth:
