@@ -5,6 +5,8 @@ export const TEMPLATES_DIR = path.resolve('src', 'templates');
 export const TEMP_UPLOAD_DIR = path.resolve('temp'); // для зображень
 export const UPLOADS_DIR = path.resolve('uploads'); // для зображень
 
+export const SWAGGER_PATH = path.resolve('docs', 'swagger.json');
+
 export const FIFTEEN_MINUTES = 15 * 60 * 1000;
 export const ONE_DAY = 24 * 60 * 60 * 1000;
 
