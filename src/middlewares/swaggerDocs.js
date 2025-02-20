@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs';
-import swaggerUiExpress from 'swagger-ui-express';
+import { readFileSync } from 'node:fs'; // Читає файл в старому режимі
+import swaggerUiExpress from 'swagger-ui-express'; // щоб створити сторінку
 import createHttpError from 'http-errors';
 
 import { SWAGGER_PATH } from '../constants/index.js';
