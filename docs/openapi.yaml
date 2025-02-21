@@ -11,7 +11,7 @@ tags:
     description: Operations about contacts.
 servers:
   - url: http://localhost:3000
-  - url: https://contacts.com/api/v1
+  - url: https://hw7-swagger-cd2c.onrender.com
 paths:
   /contacts:
     get:
