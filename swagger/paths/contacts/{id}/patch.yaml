@@ -15,7 +15,7 @@ parameters:
       description: 'Please provide only valid MongoDB id'
 responses:
   '200':
-    description: 'Patch contact by id'
+    description: 'Successfully patched a contact!'
     content:
       application/json:
         schema:
