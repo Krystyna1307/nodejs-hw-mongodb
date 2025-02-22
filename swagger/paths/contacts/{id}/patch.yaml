@@ -5,6 +5,13 @@ operationId: patchContact
 description: 'Patch contact by id. Please provide only valid mongodb id'
 security:
   - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: '678bf8af14d55985f0900f6e'
 requestBody:
   required: true
   content:
