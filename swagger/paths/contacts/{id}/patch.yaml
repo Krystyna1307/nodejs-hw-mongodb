@@ -1,18 +1,39 @@
 tags:
   - Contacts
-summary: Patch contact by id
+summary: patchContact by id
 operationId: patchContact
 description: 'Patch contact by id. Please provide only valid mongodb id'
 security:
   - bearerAuth: []
-parameters:
-  - in: path
-    name: id
-    required: true
-    schema:
-      type: string
-      example: '65ca67e7ae7f10c88b598383'
-      description: 'Please provide only valid MongoDB id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: 'John Doe'
+          phoneNumber:
+            type: string
+            example: '+380987383434'
+          email:
+            type: string
+            example: 'john.doe@gmail.com'
+          isFavourite:
+            type: boolean
+            example: true
+          contactType:
+            type: string
+            enum:
+              - personal
+              - work
+              - family
+            example: 'personal'
+          photo:
+            type: string
+            format: binary
 responses:
   '200':
     description: 'Successfully patched a contact!'
