@@ -322,7 +322,7 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "patchContact by id",
+        "summary": "Patch contact by id",
         "operationId": "patchContact",
         "description": "Patch contact by id. Please provide only valid mongodb id",
         "security": [
@@ -344,7 +344,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
